@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAR PARK. — Prime Time</title>
+    <style>
+        :root {
+            --bg: #0b0b12;
+            --surface: #13131e;
+            --surface2: #1a1a28;
+            --gold: #c9a962;          
+            --gold-light: #e0c080;    
+            --gold-dark: #8a6b3a;     
+            --ivory: #f0e6d0;         
+            --text: #d8cfc0;
+            --text-dim: #9a9180;
+            --line: rgba(201, 169, 98, 0.3);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(ellipse at 20% 30%, rgba(138, 107, 58, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(201, 169, 98, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(60, 50, 35, 0.15) 0%, transparent 80%);
+        }
+
+        /* ВВЕРХ */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* НАВИГЕШЙН */
+        nav {
+            background: rgba(11, 11, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 24px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, var(--ivory), var(--gold), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: rgba(201, 169, 98, 0.12);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(201, 169, 98, 0.15);
+            color: var(--ivory);
+        }
+
+        /* секце */
+        .section {
+            display: none;
+            padding: 60px 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: var(--gold);
+            margin: 30px auto 0;
+        }
+
+        .hero h1 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 3.5em;
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f0e6d0, #c9a962, #b8945c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.7));
+        }
+
+        .hero .tagline {
+            font-size: 1.5em;
+            color: var(--gold-light);
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            font-style: italic;
+            font-family: 'Georgia', serif;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-size: 1.1em;
+            color: var(--text-dim);
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #8a6b3a, #c9a962);
+            color: #fff;
+            padding: 16px 40px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            border: 1px solid var(--gold-light);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            background: linear-gradient(135deg, #9a7b4a, #d4b070);
+        }
+
+        /* КАРТОЧКЕ */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 28px;
+            transition: all 0.3s;
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(201, 169, 98, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+            transform: translateY(-4px);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h3 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            color: var(--gold-light);
+            letter-spacing: 1px;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95em;
+        }
+
+        .card .icon {
+            font-size: 2.5em;
+            margin-bottom: 16px;
+            display: block;
+            filter: sepia(0.3) brightness(0.9);
+        }
+
+        /* МЕРОПРИЯТИЯ */
+        .event-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--line);
+        }
+
+        .event-table th,
+        .event-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .event-table th {
+            background: var(--surface2);
+            color: var(--gold-light);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            font-family: 'Georgia', serif;
+        }
+
+        .event-table tr:hover td {
+            background: rgba(201, 169, 98, 0.05);
+        }
+
+        /* ФУТЕР */
+        footer {
+            background: rgba(11, 11, 18, 0.98);
+            border-top: 1px solid var(--line);
+            padding: 40px 0 30px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: 'Georgia', serif;
+            font-size: 1.3em;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            color: var(--text-dim);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .disclaimer {
+            font-size: 0.45em;
+            color: #3a3428;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.4;
+            letter-spacing: 0.5px;
+            user-select: none;
+            cursor: default;
+            transition: color 0.5s;
+        }
+
+        .disclaimer:hover {
+            color: #5a5240;
+        }
+
+        .disclaimer span {
+            color: #2a2518;
+        }
+
+        .copyright {
+            margin-top: 24px;
+            font-size: 0.8em;
+            color: #4a4030;
+        }
+
+        /* УВЕД */
+        .notice-bar {
+            background: rgba(201, 169, 98, 0.06);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 12px 20px;
+            margin: 20px 0;
+            font-size: 0.85em;
+            color: var(--text-dim);
+            text-align: center;
+            position: relative;
+            z-index: 3;
+        }
+
+        .notice-bar a {
+            color: var(--gold);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* СТИЛИ ФОТОК */
+        .hero-image {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2em;
+            }
+            .hero .tagline {
+                font-size: 1.1em;
+            }
+            .nav-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .section {
+                padding: 40px 0;
+            }
+            .disclaimer {
+                font-size: 0.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <div class="logo" onclick="showSection('home')">S.T.A.R. PARK</div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-section="home" onclick="showSection('home')">Главная</button>
+                <button class="nav-btn" data-section="locations" onclick="showSection('locations')">Локации</button>
+                <button class="nav-btn" data-section="seven" onclick="showSection('seven')">Пятёрка</button>
+                <button class="nav-btn" data-section="join" onclick="showSection('join')">Как попасть</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- КЕЙ ЛОХ -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <!-- БАННЕР БАННЕР БАННЕР БАННЕР -->
+               <img src="хуйня.jpg" alt="STAR PARK" class="hero-image" style="max-width: 600px;">
+                
+                <h1>STAR PARK</h1>
+                <div class="tagline">«Стар-парк - место твоего звёздного часа»</div>
+                <p>
+                    Добро пожаловать в город будущего, возведённый компанией S.T.A.R. 
+                    (Scientific Therapeutics and Augmentation Research) в самом сердце Америки. 
+                    Здесь каждый житель получает шанс на лучшую жизнь — без забот, без ограничений, 
+                    без страха. Здесь ваша мечта стать супером может стать реальностью.
+                </p>
+                <p>
+                    Присоединяйтесь к тысячам счастливых граждан, которые уже сделали свой выбор. 
+                    Ваш звёздный час ждёт вас.
+                </p>
+                <button class="cta-btn" onclick="showSection('join')">Узнать, как попасть</button>
+                <p style="margin-top: 20px;">
+                    <a href="https://t.me/PrimeTimeRoleplay" target="_blank" 
+                       style="color: var(--gold); text-decoration: none; font-size: 1.1em; letter-spacing: 1px; border-bottom: 1px solid var(--gold); padding-bottom: 2px;">
+                       Наш Telegram-канал.
+                    </a>
+                </p>
+            </div>
+
+            <div class="notice-bar">
+                ⚠ Внимание: все заявки рассматриваются индивидуально. 
+                Посещение парка возможно только после прохождения первичного отбора. 
+                <a onclick="showSection('join')">Подробнее</a>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="icon">⭐</span>
+                    <h3>Город будущего</h3>
+                    <p>
+                        Стар-парк — это автономное «государство» внутри мегаполиса, 
+                        спроектированное по последнему слову технологий. 
+                        Кристаллические формации, пронизывающие парк, 
+                        создают уникальную энергетическую среду, 
+                        которая раскрывает потенциал каждого человека.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">⭐</span>
+                    <h3>Стажировка Стар</h3>
+                    <p>
+                        Программа «Стажировка Стар» — это путь к обретению сверхспособностей. 
+                        Под руководством опытных наставников вы пройдёте курс адаптации 
+                        и, возможно, станете одним из суперов — элиты нашего парка.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">⭐</span>
+                    <h3>Пятёрка</h3>
+                    <p>
+                        Пятёрка — легендарная команда лучших суперов Стар-парка. 
+                        Каждый год проводится отбор, и у вас есть шанс 
+                        присоединиться к их числу. Следите за анонсами.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- л. Мортбуллы это не прочто пейринг... Это моя жизнь! Каждый день я встаю по утрам только чтобы подрочить на ии порно по мортис буллу, где булл сверлит анал мортиса буравчиком или своим дробовиком. Мой хуй стоит столбом как только я вижу хотя бы намек на этих персонажей рядом друг с другом, мои мурашки по телу начинают не просто ходить ходуном они нахуй плящут лезгинку и бьются на смерть сука при виде мортибуллов потому что мортибуллы это жизнь, мортибуллы это смысл моего существования и существования всей вселенной. Если бы не мортибуллы то человечество никогда бы не развилось и так осталось бы на уровне примата. Мортибуллы подарили мне не только разум высокое либидо но и лишнюю хромосому, потому что мои папочки мортибуллы всегда были шедры со мной как и спермой так и моим просвящением. С каждый упоминанием мортибуллов на земле один человек выздоравливает от рака а при каждом оргазме на мортибуллов на свет рождается один илон маск. И я дрочу, я дрочу на порно фанфики по мортибуллам я - главная причина почему демография в России еще не снизилась к нулю я кончаю на телефон чтобы где-то в подворотне алкаш кончал внутрь пристарелой бабке и та рожала нового отпрыска на этот свет чтобы он тоже стал фанатом мортибуллов.на земле еще есть люди с синдромом дауна только потому что кто-то еще не дрочил на мортибуллов. -->
+        <section id="locations" class="section">
+            <h2 style="text-align:center; font-size:2.2em; margin-bottom:10px; color:var(--gold-light); font-family:'Georgia', serif; letter-spacing:2px;">Локации Стар-парка</h2>
+            <p style="text-align:center; color:var(--text-dim); margin-bottom:40px; font-style:italic;">
+                Каждый уголок Стар-парка продуман до мелочей, чтобы ваша жизнь была комфортной и яркой.
+            </p>
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="icon">☆</span>
+                    <h3>Сердце парка</h3>
+                    <p>
+                        Центральная арена, где проходят все бои и соревнования. 
+                        Ежегодные отборы в Пятёрку и в число участников Стар — 
+                        главные события парка. Трибуны вмещают тысячи зрителей. 
+                        Для жителей Стар-парка вход бесплатный, для гостей — 
+                        билеты по специальной цене. Центральная сцена принимает 
+                        все ключевые мероприятия.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">☆</span>
+                    <h3>Неоновый бульвар</h3>
+                    <p>
+                        Самое роскошное и престижное развлекательное место в Стар-парке. 
+                        Улицы забиты барами, кафе, ресторанами, тирами и тематическими магазинами, мероприятия для ставок на соревнования Суперов.
+                    
+                        Для суперов предусмотрен отдельный бар с особым доступом.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">☆</span>
+                    <h3>Жилые сектора</h3>
+                    <p>
+                        Комфортабельное жильё для всех резидентов Стар-парка. 
+                        Современные апартаменты с полным доступом к инфраструктуре. 
+                        Чем выше ваш статус, тем ближе вы живёте к Сердцу парка. 
+                        Для участников Стар и членов Пятёрки предусмотрены отдельные резиденции.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">☆</span>
+                    <h3>Парк аттракционов</h3>
+                    <p>
+                        Горки, лабиринты зеркал, свободное падение на канате, 
+                        виртуальная арена — всё это ждёт вас в парке аттракционов. 
+                        Адреналин гарантирован, а благодаря кристаллической энергии 
+                        ощущения становятся ещё более яркими.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">☆</span>
+                    <h3>Лабораторный комплекс</h3>
+                    <p>
+                        Открытая больница Стар-парка и одновременно закрытый сектор 
+                        со всеми исследованиями и разработками препарата. 
+                        Здесь вы можете пройти полное медицинское обследование 
+                        и получить допуск к программе «Стажировка Стар». 
+                        Доступ в закрытый сектор строго ограничен.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">☆</span>
+                    <h3>Купол природы</h3>
+                    <p>
+                        Уникальный биом с дикими растениями, некоторые из которых 
+                        приобрели необычные свойства под воздействием кристаллов. 
+                        Идеальное место для прогулок, медитаций и восстановления сил. 
+                        Говорят, что некоторые растения здесь светятся в темноте.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">☆</span>
+                    <h3>Парк имени Стар</h3>
+                    <p>
+                        Мемориальный парк с памятниками первым суперам и главному директору S.T.A.R. 
+                        Тематические мини-магазинчики и музей расскажут вам историю парка. 
+                        Идеальное место для тех, кто хочет прикоснуться к легенде.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="icon">☆</span>
+                    <h3>Сцены для выступлений</h3>
+                    <p>
+                        По всему Стар-парку, особенно около Сердца, расположены сцены 
+                        для музыкантов и выступлений суперов. Концерты, шоу, 
+                        публичные демонстрации способностей — всё это часть жизни парка. 
+                        Стань звездой не только в бою, но и на сцене.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ПЯТЁРКА -->
+        <section id="seven" class="section">
+            <h2 style="text-align:center; font-size:2.2em; margin-bottom:10px; color:var(--gold-light); font-family:'Georgia', serif; letter-spacing:2px;">Пятёрка</h2>
+            <p style="text-align:center; color:var(--text-dim); margin-bottom:40px; font-style:italic;">
+                Элита Стар-парка. Пятеро избранных.
+            </p>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p style="color: var(--text-dim); font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
+                    Пятёрка — это пятеро сильнейших суперов Стар-парка, избранных из числа участников Стар. 
+                    Они — лицо парка, его легенды и защитники. Но статус этот не вечен: каждый год проводится 
+                    отбор, в ходе которого любой участник Стар может бросить вызов действующим членам Пятёрки. 
+                    Победитель занимает место побеждённого, а тот отправляется в отставку — или возвращается, 
+                    чтобы доказать, что его рано списали.
+                </p>
+                <p style="color: var(--text-dim); font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
+                    Иногда место освобождается по иным причинам: по собственному желанию, по решению руководства 
+                    S.T.A.R. или в результате травм, несовместимых с продолжением карьеры. Тогда проводится 
+                    экстренный отбор, и новый чемпион входит в круг избранных.
+                </p>
+                <p style="color: var(--gold-light); font-size: 1.1em; font-style: italic;">
+                    Хотите стать одним из них? Путь в Пятёрку начинается со статуса участника Стар. 
+                    Узнайте больше в разделе «Как попасть».
+                </p>
+            </div>
+        </section>
+
+        <!-- КАК ПОПАСТЬ -->
+        <section id="join" class="section">
+            <h2 style="text-align:center; font-size:2.2em; margin-bottom:10px; color:var(--gold-light); font-family:'Georgia', serif; letter-spacing:2px;">Как попасть в Стар-парк</h2>
+            <p style="text-align:center; color:var(--text-dim); margin-bottom:40px; font-style:italic;">
+                Ваш путь к звёздному часу начинается здесь. Ознакомьтесь с этапами отбора 
+                и мероприятиями, которые проводятся в парке.
+            </p>
+
+            <h3 style="color:var(--gold-light); margin-bottom:20px; font-family:'Georgia', serif; letter-spacing:1px;">Этапы отбора в резиденты</h3>
+            <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div class="card">
+                    <h3>1. Заявка</h3>
+                    <p>
+                        Подайте онлайн-заявку на официальном канале S.T.A.R. 
+                        Укажите ваши данные, мотивацию и ожидания от жизни в Стар-парке.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>2. Собеседование</h3>
+                    <p>
+                        После предварительного отбора вас пригласят на собеседование 
+                        с представителями компании. Оно проходит в комфортной обстановке.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>3. Медосмотр</h3>
+                    <p>
+                        Полное медицинское обследование в лабораторном комплексе парка. 
+                        Это необходимо для определения совместимости с кристаллической средой.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>4. Адаптация</h3>
+                    <p>
+                        Первые недели в парке — период адаптации. Вы осваиваетесь, 
+                        знакомитесь с локациями и правилами.
+                    </p>
+                </div>
+            </div>
+
+            <h3 style="color:var(--gold); margin:40px 0 20px; font-family:'Georgia', serif; letter-spacing:1px;">Путь в Пятёрку</h3>
+            <p style="color:var(--text-dim); margin-bottom:20px; font-style:italic;">
+                Стать членом пятёрки могут только участники Стар — суперы, 
+                прошедшие стажировку и доказавшие свою силу. Ежегодный отбор включает:
+            </p>
+            <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div class="card">
+                    <h3>Бои</h3>
+                    <p>Соревнования на арене «Сердце парка» в присутствии тысяч зрителей.</p>
+                </div>
+                <div class="card">
+                    <h3>Испытания способностей</h3>
+                    <p>Демонстрация уникальных навыков перед судейской коллегией.</p>
+                </div>
+                <div class="card">
+                    <h3>Командные задания</h3>
+                    <p>Проверка умения работать в команде с другими участниками Стар.</p>
+                </div>
+                <div class="card">
+                    <h3>Решение Пятёрки</h3>
+                    <p>Финальное решение принимают действующие члены Пятёрки совместно с руководством S.T.A.R.</p>
+                </div>
+            </div>
+
+            <h3 style="color:var(--gold-light); margin:40px 0 20px; font-family:'Georgia', serif; letter-spacing:1px;">Одни из наших мероприятий.</h3>
+            <table class="event-table">
+                <thead>
+                    <tr>
+                        <th>Событие</th>
+                        <th>Локация</th>
+                        <th>Доступ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Открытие сезона — шоу суперов</td>
+                        <td>Сердце парка</td>
+                        <td>Бесплатно для резидентов</td>
+                    </tr>
+                    <tr>
+                        <td>Квалификационные бои</td>
+                        <td>Сердце парка</td>
+                        <td>По билетам</td>
+                    </tr>
+                    <tr>
+                        <td>Выставка достижений S.T.A.R.</td>
+                        <td>Парк имени Стар</td>
+                        <td>Свободный</td>
+                    </tr>
+                    <tr>
+                        <td>Ночной концерт на Неоновом бульваре</td>
+                        <td>Неоновый бульвар</td>
+                        <td>Свободный</td>
+                    </tr>
+                    <tr>
+                        <td>Полуфинал отбора в Пятёрку</td>
+                        <td>Сердце парка</td>
+                        <td>По билетам</td>
+                    </tr>
+                    <tr>
+                        <td>Финал отбора в Пятёрку</td>
+                        <td>Сердце парка</td>
+                        <td>Бесплатно для резидентов</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">S.T.A.R. PARK</div>
+            <div class="footer-links">
+                <a onclick="showSection('home')">Главная</a>
+                <a onclick="showSection('locations')">Локации</a>
+                <a onclick="showSection('seven')">Пятёрка</a>
+                <a onclick="showSection('join')">Как попасть</a>
+                <a href="#">Контакты</a>
+                <a href="https://t.me/PrimeTimeRoleplay" target="_blank">Пресс-центр</a>
+            </div>
+            <div class="disclaimer">
+                <span>ПОЛОЖЕНИЕ ОБ ОГРАНИЧЕНИИ ОТВЕТСТВЕННОСТИ И ПРИНЯТИИ РИСКОВ</span><br><br>
+                <span>Компания S.T.A.R. (Scientific Therapeutics and Augmentation Research), включая её дочерние структуры, аффилированные лица, директоров, сотрудников, агентов и представителей (далее — «Компания»), настоящим уведомляет, что участие в программе «Стажировка Стар», проживание на территории Стар-парка, взаимодействие с кристаллическими образованиями, а также любые иные действия, связанные с пребыванием в пределах парка, осуществляются исключительно на добровольной основе и под личную ответственность участника.</span><br><br>
+                <span>Компания не несёт ответственности за любой прямой, косвенный, случайный, специальный, карательный или последующий ущерб, включая, но не ограничиваясь: физические травмы, психологические расстройства, эмоциональные потрясения, изменения личности, потерю памяти, непреднамеренные мутации, временные или постоянные искажения восприятия реальности, утрату трудоспособности, а также любые последствия контакта с кристаллическими формациями, энергетическими полями или препаратами, используемыми в рамках программы. Участник принимает на себя все риски, связанные с возможными побочными эффектами, известными и неизвестными, и отказывается от любых претензий к Компании в максимально допустимой законом степени.</span><br><br>
+                <span>Подписывая соглашение и/или пересекая границу Стар-парка, участник подтверждает полное и безоговорочное согласие с вышеизложенными условиями. Слава 42.</span>
+            </div>
+            <div class="copyright">
+                © 2026 S.T.A.R. Corporation. All rights reserved. Prime Time™.<br>
+                by @KimmGluttony
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.add('active');
+            }
+
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.section === sectionId) {
+                    btn.classList.add('active');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.footer-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                if (section) {
+                    showSection(section);
+                }
+            });
+        });
+
+        // ПЯТНЫШКИ
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            for (let i = 0; i < 15; i++) {
+                const light = document.createElement('div');
+                light.style.cssText = `
+                    position: fixed;
+                    width: ${Math.random() * 8 + 3}px;
+                    height: ${Math.random() * 8 + 3}px;
+                    background: radial-gradient(circle, rgba(201, 169, 98, ${Math.random() * 0.4 + 0.1}) 0%, transparent 70%);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 0;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation: softGlow ${Math.random() * 5 + 4}s ease-in-out infinite;
+                    animation-delay: ${Math.random() * 5}s;
+                `;
+                body.appendChild(light);
+            }
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes softGlow {
+                    0%, 100% { opacity: 0.2; transform: scale(1); }
+                    50% { opacity: 0.7; transform: scale(1.8); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
